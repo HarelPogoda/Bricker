@@ -7,24 +7,44 @@ import danogl.util.Vector2;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * Represents the user-controlled paddle in the game.
+ * The paddle moves horizontally based on keyboard input (Left/Right arrows)
+ * and is constrained within specific horizontal boundaries (minX and maxX).
+ * @author Nehorai Amrusi, Harel Pogoda
+ */
 public class Paddle extends GameObject {
-    private static final float MOVEMENT_SPEED = 400;
+    private static final float MOVEMENT_SPEED = 400f;
     private UserInputListener inputListener;
+    private float leftBoundary;
+    private float rightBoundary;
 
     /**
      * Construct a new GameObject instance.
-     *  @param topLeftCorner Position of the object, in window coordinates (pixels).
+     * @param topLeftCorner Position of the object, in window coordinates (pixels).
      *                      Note that (0,0) is the top-left corner of the window.
      * @param dimensions    Width and height in window coordinates.
      * @param renderable    The renderable representing the object. Can be null, in which case
      * @param inputListener
+     * @param minX          The left boundary for paddle movement
+     * @param maxX          The right boundary for paddle movement
      */
     public Paddle(Vector2 topLeftCorner, Vector2 dimensions,
-                      Renderable renderable, UserInputListener inputListener) {
+                      Renderable renderable, UserInputListener inputListener,
+                        float minX, float maxX) {
+        this.leftBoundary = minX;
+        this.rightBoundary = maxX;
         super(topLeftCorner, dimensions, renderable);
         this.inputListener = inputListener;
     }
 
+    /**
+     * Updates the paddle's state.
+     * Checks for left/right keyboard input to set velocity and ensures the paddle
+     * does not move beyond the defined left and right boundaries.
+     *
+     * @param deltaTime The time elapsed, in seconds, since the last frame.
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -36,5 +56,15 @@ public class Paddle extends GameObject {
             movementDir = movementDir.add(Vector2.RIGHT);
         }
         setVelocity(movementDir.mult(MOVEMENT_SPEED));
+
+        // Checking the paddle doesn't leave the screen
+        float topLeftX = getTopLeftCorner().x();
+
+        if (topLeftX < leftBoundary) {
+            setTopLeftCorner(new Vector2(leftBoundary, getTopLeftCorner().y()));
+        }
+        else if (topLeftX + getDimensions().x() > rightBoundary) {
+            setTopLeftCorner(new Vector2(rightBoundary - getDimensions().x(), getTopLeftCorner().y()));
+        }
     }
 }

@@ -6,6 +6,16 @@ import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * Represents the ball object in the game.
+ * This class manages the ball's velocity, collision behavior (bouncing off objects),
+ * and sound effects upon impact. It also tracks the total number of collisions it has participated in.
+ *
+ * The sound when the ball hits something comes from:
+ * https://soundbible.com/2067-Blop.html, as the instructions to the assignment
+ * say we should mind copyrights.
+ * @author Nehorai Amrusi, Harel Pogoda
+ */
 public class Ball extends GameObject {
     private Sound collisionSound;
     private int collisionCounter;
@@ -24,6 +34,14 @@ public class Ball extends GameObject {
         this.collisionSound = collisionSound;
     }
 
+    /**
+     * Called when a collision occurs with another GameObject.
+     * This method reverses the ball's velocity based on the collision normal (causing it to bounce),
+     * increments the collision counter, and plays the collision sound.
+     *
+     * @param other     The other GameObject involved in the collision.
+     * @param collision The collision information, including the point of impact and the normal vector.
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
@@ -33,6 +51,11 @@ public class Ball extends GameObject {
         collisionSound.play();
     }
 
+    /**
+     * Retrieves the total number of collisions this ball has been involved in since its creation.
+     *
+     * @return The collision count.
+     */
     public int getCollisionCounter() {
         return collisionCounter;
     }
