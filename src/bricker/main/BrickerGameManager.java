@@ -1,28 +1,31 @@
 package bricker.main;
 import danogl.GameManager;
 import danogl.GameObject;
-import danogl.gui.ImageReader;
-import danogl.gui.SoundReader;
-import danogl.gui.UserInputListener;
-import danogl.gui.WindowController;
+import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+import gameobjects.Ball;
+import gameobjects.Paddle;
+
+import java.util.Random;
+
 public class BrickerGameManager extends GameManager{
     static final String GAME_TITLE = "Bricker";
     static final String BALL_IMAGE_PATH = "assets/ball.png";
     static final String BLOP_PATH = "assets/blop.wav";
+    static final String PADDLE_IMAGE_PATH = "assets/paddle.png";
 
     static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 500;
-    static final int BALL_RADIUS = 40;
+    static final int BALL_RADIUS = 10; // instructions are that the ball will be 20*20
     static final int BALL_SPEED = 100;
-    static final float BALL_COORDINATES = 0.5f;
+    static final int PADDLE_WIDTH = 100;
+    static final int PADDLE_HEIGHT = 15;
+    static final float BALL_START_COORDINATES = 0.5f;
 
-    private ImageReader;
-    private WindowController windowController;
     private Vector2 windowDimensions;
 
-    public BrickerGameManager(String windowTitle, Vector2 screenSize){
+    public BrickerGameManager(String windowTitle, Vector2 screenSize) {
         super(windowTitle, screenSize);
     }
 
@@ -30,10 +33,6 @@ public class BrickerGameManager extends GameManager{
         BrickerGameManager gameManager = new BrickerGameManager(
                 GAME_TITLE, new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
         gameManager.run();
-        this.initializeGame(new ImageReader(),
-                new SoundReader(),
-                new UserInputListener(),
-                new WindowController())
     }
 
     @Override
@@ -41,16 +40,46 @@ public class BrickerGameManager extends GameManager{
                                SoundReader soundReader,
                                UserInputListener inputListener,
                                WindowController windowController) {
-        this.windowController = windowController;
 
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
+        this.windowDimensions = windowController.getWindowDimensions();
 
-        Renderable ballImage = imageReader.readImage(BALL_IMAGE_PATH, true);
-        GameObject ball = new GameObject(Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), ballImage);
-        ball.setVelocity(Vector2.DOWN.mult(BALL_SPEED));
-        windowDimensions = windowController.getWindowDimensions();
-        ball.setCenter(new Vector2(BALL_COORDINATES, BALL_COORDINATES));
+        createBall(imageReader, soundReader, windowController);
+
+        Renderable paddleImage = imageReader.readImage(PADDLE_IMAGE_PATH, true);
+        createPaddle(paddleImage, inputListener, windowDimensions);
+    }
+
+    private void createBall(ImageReader imageReader, SoundReader soundReader, WindowController windowController) {
+        Renderable ballImage =
+                imageReader.readImage(BALL_IMAGE_PATH, true);
+        Sound collisionSound = soundReader.readSound(BLOP_PATH);
+        GameObject ball = new Ball(
+                Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), ballImage, collisionSound);
+
+        ball.setCenter(windowDimensions.mult(BALL_START_COORDINATES));
         gameObjects().addGameObject(ball);
+
+        float ballVelX = BALL_SPEED;
+        float ballVelY = BALL_SPEED;
+        Random rand = new Random();
+        if(rand.nextBoolean())
+            ballVelX *= -1;
+        if(rand.nextBoolean())
+            ballVelY *= -1;
+        ball.setVelocity(new Vector2(ballVelX, ballVelY));
+    }
+
+    private void createPaddle(Renderable paddleImage, UserInputListener inputListener, Vector2 windowDimensions) {
+        GameObject userPaddle = new Paddle(
+                Vector2.ZERO,
+                new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT),
+                paddleImage,
+                inputListener);
+
+        userPaddle.setCenter(
+                new Vector2(windowDimensions.x()/2, (int)windowDimensions.y()-30));
+        gameObjects().addGameObject(userPaddle);
     }
 
 }
