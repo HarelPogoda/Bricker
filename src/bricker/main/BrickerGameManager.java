@@ -16,8 +16,9 @@ public class BrickerGameManager extends GameManager{
     static final String BALL_IMAGE_PATH = "assets/ball.png";
     static final String BLOP_PATH = "assets/blop.wav";
     static final String PADDLE_IMAGE_PATH = "assets/paddle.png";
+    static final String BACKGROUND_IMAGE_PATH = "assets/DARK_BG2_small.jpeg";
 
-    static final Color WALLS_COLOR = Color.BLACK;
+    static final Color WALLS_COLOR = Color.MAGENTA;
 
     static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 500;
@@ -58,17 +59,15 @@ public class BrickerGameManager extends GameManager{
         this.soundReader = soundReader;
         this.inputListener = inputListener;
 
-        Renderable ballImage = imageReader.readImage(BALL_IMAGE_PATH, true);
-        Sound collisionSound = soundReader.readSound(BLOP_PATH);
-        createBall(ballImage, collisionSound);
-
-        Renderable paddleImage = imageReader.readImage(PADDLE_IMAGE_PATH, true);
-        createPaddle(paddleImage);
-
+        createBackground();
+        createBall();
+        createPaddle();
         createWalls();
     }
 
-    private void createBall(Renderable ballImage, Sound collisionSound) {
+    private void createBall() {
+        Renderable ballImage = imageReader.readImage(BALL_IMAGE_PATH, true);
+        Sound collisionSound = soundReader.readSound(BLOP_PATH);
         GameObject ball = new Ball(
                 Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), ballImage, collisionSound);
 
@@ -85,7 +84,8 @@ public class BrickerGameManager extends GameManager{
         ball.setVelocity(new Vector2(ballVelX, ballVelY));
     }
 
-    private void createPaddle(Renderable paddleImage) {
+    private void createPaddle() {
+        Renderable paddleImage = imageReader.readImage(PADDLE_IMAGE_PATH, true);
         GameObject paddle = new Paddle(
                 Vector2.ZERO,
                 new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT),
@@ -116,6 +116,15 @@ public class BrickerGameManager extends GameManager{
         gameObjects().addGameObject(leftWall);
         gameObjects().addGameObject(rightWall);
         gameObjects().addGameObject(topWall);
+    }
+
+    private void createBackground() {
+        Renderable backgroundImage = imageReader.readImage(BACKGROUND_IMAGE_PATH, false);
+        GameObject backGround = new GameObject(
+                Vector2.ZERO,
+                new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT),
+                backgroundImage);
+        gameObjects().addGameObject(backGround);
     }
 
 }
