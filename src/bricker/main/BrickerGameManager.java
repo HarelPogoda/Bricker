@@ -125,7 +125,9 @@ public class BrickerGameManager extends GameManager{
                 Vector2.ZERO,
                 new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT),
                 backgroundImage);
+
         backGround.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
+
         gameObjects().addGameObject(backGround);
     }
 
