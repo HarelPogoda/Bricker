@@ -1,6 +1,7 @@
 package bricker.main;
 import danogl.GameManager;
 import danogl.GameObject;
+import danogl.components.CoordinateSpace;
 import danogl.gui.*;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
@@ -124,6 +125,7 @@ public class BrickerGameManager extends GameManager{
                 Vector2.ZERO,
                 new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT),
                 backgroundImage);
+        backGround.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         gameObjects().addGameObject(backGround);
     }
 
