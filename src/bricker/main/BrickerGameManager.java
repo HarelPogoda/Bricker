@@ -141,7 +141,7 @@ public class BrickerGameManager extends GameManager{
         createBall();
         createPaddle();
         createWalls();
-        createBricks(this.rowsOfBricks,this.bricksPerRow,this.brickCounter);
+        createBricks(this.rowsOfBricks,this.bricksPerRow);
         createHearts();
     }
 
@@ -239,10 +239,10 @@ public class BrickerGameManager extends GameManager{
      * @param cols    The number of columns of bricks to create in each row.
      * @param counter
      */
-    private void createBricks(int rows, int cols, Counter counter) {
+    private void createBricks(int rows, int cols) {
     Renderable renderable = imageReader.readImage(BRICK_PATH, false);
+    this.brickCounter = new Counter(0);
     CollisionStrategy collisionStrategy = new BasicCollisionStrategy(this.gameObjects(),this.brickCounter);
-
 
 
     float totalAvailableWidth = SCREEN_WIDTH - (2 * WALL_WIDTH) - ((cols - 1) * SPACE_BETWEEN_OBJECTS);
@@ -263,7 +263,7 @@ public class BrickerGameManager extends GameManager{
             );
 
             gameObjects().addGameObject(brick, Layer.STATIC_OBJECTS);
-            counter.increment();
+            brickCounter.increment();
         }
     }
 }
