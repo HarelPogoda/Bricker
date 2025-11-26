@@ -13,7 +13,8 @@ public class Brick extends GameObject {
     private final int col;
     private final CollisionStrategy collisionstrategy;
 
-    public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, int row, int col, CollisionStrategy collisionstrategy) {
+    public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
+                 int row, int col, CollisionStrategy collisionstrategy) {
         super(topLeftCorner, dimensions, renderable);
         this.row = row;
         this.col = col;
@@ -21,9 +22,9 @@ public class Brick extends GameObject {
     }
 
     @Override
-    public void onCollisionEnter(GameObject other, Collision collision) {
-        super.onCollisionEnter(other, collision);
-        this.collisionstrategy.onCollision(this,other);
+    public void onCollisionEnter(GameObject otherObject, Collision collision) {
+        super.onCollisionEnter(otherObject, collision);
+        this.collisionstrategy.onCollision(this, otherObject);
     }
 
 

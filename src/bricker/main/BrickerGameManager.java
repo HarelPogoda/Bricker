@@ -1,5 +1,7 @@
 package bricker.main;
+
 import bricker.brick_strategies.BasicCollisionStrategy;
+import bricker.brick_strategies.BrickStrategyFactory;
 import bricker.brick_strategies.CollisionStrategy;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -35,14 +37,15 @@ public class BrickerGameManager extends GameManager{
     static final String BACKGROUND_IMAGE_PATH = "assets/DARK_BG2_small.jpeg";
     static final String BRICK_PATH = "assets/brick.png";
     static final String HEART_PATH = "assets/heart.png";
-    static final String LOSE_MASSAGE = "You lose! Play again?";
+    static final String LOSE_MESSAGE = "You lose! Play again?";
+    static final String WIN_MESSAGE = "You win! Play again?";
 
     static final Color WALLS_COLOR = Color.MAGENTA;
 
-    static final int SCREEN_WIDTH = 1400;
+    static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 500;
     static final int BALL_RADIUS = 10; // instructions are that the ball will be 20*20
-    static final int BALL_SPEED = 200;
+    static final int BALL_SPEED = 100;
     static final int PADDLE_WIDTH = 100;
     static final int PADDLE_HEIGHT = 15;
     static final float BALL_START_COORDINATES = 0.5f;
@@ -53,8 +56,8 @@ public class BrickerGameManager extends GameManager{
     static final int REVERSE = -1;
     static final int BRICK_HEIGHT = 15;
     static final float SPACE_BETWEEN_OBJECTS = 1;
-    static final int DEFAULT_BRICKS_PER_ROW= 2;
-    static final int DEFAULT_BRICK_ROWS =1;
+    static final int DEFAULT_BRICKS_PER_ROW= 10;
+    static final int DEFAULT_BRICK_ROWS =5;
     private static final int MAX_LIVES = 3;
     private static final float HEARTS_X_POS = 30f;
     private static final float HEARTS_Y_MARGIN = 50f;
@@ -68,8 +71,8 @@ public class BrickerGameManager extends GameManager{
     private ImageReader imageReader;
     private UserInputListener inputListener;
     private SoundReader soundReader;
-    private int rowsOfBricks;
-    private int bricksPerRow;
+    private final int rowsOfBricks;
+    private final int bricksPerRow;
     private WindowController windowController;
     private Ball ball;
     private Counter brickCounter;
@@ -82,8 +85,8 @@ public class BrickerGameManager extends GameManager{
      *
      * @param windowTitle  The title to be displayed on the game window.
      * @param screenSize   The dimensions (width and height) of the game window.
-     * @param rowsOfBricks
-     * @param bricksPerRow
+     * @param rowsOfBricks Number of rows on the screen
+     * @param bricksPerRow Number of columns on the screen
      */
     public BrickerGameManager(String windowTitle, Vector2 screenSize, int rowsOfBricks, int bricksPerRow) {
         super(windowTitle, screenSize);
@@ -141,7 +144,7 @@ public class BrickerGameManager extends GameManager{
         createBall();
         createPaddle();
         createWalls();
-        createBricks(this.rowsOfBricks,this.bricksPerRow);
+        createBricks();
         createHearts();
     }
 
@@ -194,13 +197,12 @@ public class BrickerGameManager extends GameManager{
      *
      * @param deltaTime The time elapsed, in seconds, since the last frame.
      */
-
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
         if (brickCounter.value() <= 0 || inputListener.isKeyPressed(KeyEvent.VK_W)) {
-            handleGameEnd("You win! Play again?");
+            handleGameEnd(WIN_MESSAGE);
             return;
         }
 
@@ -213,7 +215,7 @@ public class BrickerGameManager extends GameManager{
                 ball.setCenter(windowController.getWindowDimensions().mult(0.5f));
                 ball.setVelocity(set_ball_direction());
             } else {
-                handleGameEnd("You Lose! Play again?");
+                handleGameEnd(LOSE_MESSAGE);
             }
         }
     }
@@ -234,30 +236,25 @@ public class BrickerGameManager extends GameManager{
      * number of columns to ensure they fit perfectly between the walls.
      * It creates the brick objects, assigns them a collision strategy, and adds them to the
      * game's static object layer.
-     *
-     * @param rows    The number of rows of bricks to create.
-     * @param cols    The number of columns of bricks to create in each row.
-     * @param counter
      */
-    private void createBricks(int rows, int cols) {
+    private void createBricks() {
     Renderable renderable = imageReader.readImage(BRICK_PATH, false);
     this.brickCounter = new Counter(0);
-    CollisionStrategy collisionStrategy = new BasicCollisionStrategy(this.gameObjects(),this.brickCounter);
 
+    float totalAvailableWidth = SCREEN_WIDTH - (2 * WALL_WIDTH) - ((bricksPerRow - 1) * SPACE_BETWEEN_OBJECTS);
+    float brickWidth = totalAvailableWidth / bricksPerRow;
 
-    float totalAvailableWidth = SCREEN_WIDTH - (2 * WALL_WIDTH) - ((cols - 1) * SPACE_BETWEEN_OBJECTS);
-    float brickWidth = totalAvailableWidth / cols;
+    for (int row = 0; row < rowsOfBricks; row++) {
+        for (int column = 0; column < bricksPerRow; column++) {
+            float x = WALL_WIDTH + (column * (brickWidth + SPACE_BETWEEN_OBJECTS));
+            float y = WALL_WIDTH + (row * (BRICK_HEIGHT + SPACE_BETWEEN_OBJECTS));
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            float x = WALL_WIDTH + (j * (brickWidth + SPACE_BETWEEN_OBJECTS));
-            float y = WALL_WIDTH + (i * (BRICK_HEIGHT + SPACE_BETWEEN_OBJECTS));
-
-
+            CollisionStrategy collisionStrategy = new BrickStrategyFactory(
+                    this.gameObjects(),this.brickCounter);
             Brick brick = new Brick(
                     new Vector2(x, y),
                     new Vector2(brickWidth, BRICK_HEIGHT),
-                    renderable,i,j,
+                    renderable,row,column,
                     collisionStrategy
 
             );
@@ -276,7 +273,6 @@ public class BrickerGameManager extends GameManager{
      *
      * @return A Vector2 representing the new velocity of the ball.
      */
-
     private Vector2 set_ball_direction(){
         float ballVelX = BALL_SPEED;
         float ballVelY = BALL_SPEED;
