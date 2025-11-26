@@ -1,4 +1,4 @@
-package gameobjects;
+package bricker.gameobjects;
 
 import danogl.GameObject;
 import danogl.collisions.Collision;
@@ -10,7 +10,6 @@ import danogl.util.Vector2;
  * Represents the ball object in the game.
  * This class manages the ball's velocity, collision behavior (bouncing off objects),
  * and sound effects upon impact. It also tracks the total number of collisions it has participated in.
- *
  * The sound when the ball hits something comes from:
  * https://soundbible.com/2067-Blop.html, as the instructions to the assignment
  * say we should mind copyrights.

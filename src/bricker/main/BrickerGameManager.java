@@ -1,6 +1,5 @@
 package bricker.main;
 
-import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.BrickStrategyFactory;
 import bricker.brick_strategies.CollisionStrategy;
 import danogl.GameManager;
@@ -12,15 +11,15 @@ import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Counter;
 import danogl.util.Vector2;
-import gameobjects.Ball;
-import gameobjects.Brick;
-import gameobjects.Paddle;
+import bricker.gameobjects.Ball;
+import bricker.gameobjects.Brick;
+import bricker.gameobjects.Paddle;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
-import gameobjects.GraphicLifeCounter;
-import gameobjects.NumericLifeCounter;
+import bricker.gameobjects.GraphicLifeCounter;
+import bricker.gameobjects.NumericLifeCounter;
 
 /**
  * The main manager for the Bricker game.
@@ -44,8 +43,8 @@ public class BrickerGameManager extends GameManager{
 
     static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 500;
-    static final int BALL_RADIUS = 10; // instructions are that the ball will be 20*20
-    static final int BALL_SPEED = 100;
+    static final float BALL_RADIUS = 10f; // instructions are that the ball will be 20*20, don't change
+    static final float BALL_SPEED = 100f;
     static final int PADDLE_WIDTH = 100;
     static final int PADDLE_HEIGHT = 15;
     static final float BALL_START_COORDINATES = 0.5f;
@@ -57,7 +56,7 @@ public class BrickerGameManager extends GameManager{
     static final int BRICK_HEIGHT = 15;
     static final float SPACE_BETWEEN_OBJECTS = 1;
     static final int DEFAULT_BRICKS_PER_ROW= 10;
-    static final int DEFAULT_BRICK_ROWS =5;
+    static final int DEFAULT_BRICK_ROWS = 5;
     private static final int MAX_LIVES = 3;
     private static final float HEARTS_X_POS = 30f;
     private static final float HEARTS_Y_MARGIN = 50f;
@@ -220,13 +219,13 @@ public class BrickerGameManager extends GameManager{
         }
     }
 
-        private void handleGameEnd(String prompt) {
-            if (windowController.openYesNoDialog(prompt)) {
-                windowController.resetGame();
-            } else {
-                windowController.closeWindow();
-            }
+    private void handleGameEnd(String prompt) {
+        if (windowController.openYesNoDialog(prompt)) {
+            windowController.resetGame();
+        } else {
+            windowController.closeWindow();
         }
+    }
 
 
 
@@ -240,6 +239,8 @@ public class BrickerGameManager extends GameManager{
     private void createBricks() {
     Renderable renderable = imageReader.readImage(BRICK_PATH, false);
     this.brickCounter = new Counter(0);
+    BrickStrategyFactory factory = new BrickStrategyFactory(this.gameObjects(), this.brickCounter,
+            imageReader, soundReader, inputListener, windowDimensions);
 
     float totalAvailableWidth = SCREEN_WIDTH - (2 * WALL_WIDTH) - ((bricksPerRow - 1) * SPACE_BETWEEN_OBJECTS);
     float brickWidth = totalAvailableWidth / bricksPerRow;
@@ -249,21 +250,19 @@ public class BrickerGameManager extends GameManager{
             float x = WALL_WIDTH + (column * (brickWidth + SPACE_BETWEEN_OBJECTS));
             float y = WALL_WIDTH + (row * (BRICK_HEIGHT + SPACE_BETWEEN_OBJECTS));
 
-            CollisionStrategy collisionStrategy = new BrickStrategyFactory(
-                    this.gameObjects(),this.brickCounter);
+            CollisionStrategy collisionStrategy = factory.getStrategy();
             Brick brick = new Brick(
                     new Vector2(x, y),
                     new Vector2(brickWidth, BRICK_HEIGHT),
                     renderable,row,column,
                     collisionStrategy
-
             );
 
             gameObjects().addGameObject(brick, Layer.STATIC_OBJECTS);
             brickCounter.increment();
+            }
         }
     }
-}
 
     /**
      * Calculates a random initial velocity vector for the ball.
@@ -285,8 +284,6 @@ public class BrickerGameManager extends GameManager{
         }
         return new Vector2(ballVelX, ballVelY);
     }
-
-
 
 
     /**
