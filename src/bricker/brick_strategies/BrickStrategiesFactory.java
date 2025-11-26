@@ -1,4 +1,5 @@
 package bricker.brick_strategies;
+
 import java.util.Random;
 import danogl.collisions.GameObjectCollection;
 import danogl.gui.ImageReader;
@@ -7,7 +8,7 @@ import danogl.gui.UserInputListener;
 import danogl.util.Counter;
 import danogl.util.Vector2;
 
-public class BrickStrategyFactory {
+public class BrickStrategiesFactory {
     static final int OPTIONS_NUMBER = 10;
     static final int OPTIONS_NUMBER_NO_DOUBLE = 9;
     static final int PROBABILITY_FOR_REGULAR = 5;
@@ -26,12 +27,12 @@ public class BrickStrategyFactory {
     private final Vector2 windowDimensions;
     private static final Random rand = new Random();
 
-    public BrickStrategyFactory(GameObjectCollection gameObjectCollection,
-                                Counter brickCounter,
-                                ImageReader imageReader,
-                                SoundReader soundReader,
-                                UserInputListener inputListener,
-                                Vector2 windowDimensions) {
+    public BrickStrategiesFactory(GameObjectCollection gameObjectCollection,
+                                  Counter brickCounter,
+                                  ImageReader imageReader,
+                                  SoundReader soundReader,
+                                  UserInputListener inputListener,
+                                  Vector2 windowDimensions) {
         this.gameObjects = gameObjectCollection;
         this.counter = brickCounter;
         this.imageReader = imageReader;
@@ -55,17 +56,17 @@ public class BrickStrategyFactory {
 
         if (result < PROBABILITY_FOR_REGULAR) { // 50% (0,1,2,3,4)
             return new BasicCollisionStrategy(gameObjects, counter);
-        } else if (result == PROBABILITY_FOR_PUCKS) {
+        } //else if (result == PROBABILITY_FOR_PUCKS) {
             return new PucksStrategy(gameObjects, counter, imageReader, soundReader);
-        } else if (result == PROBABILITY_FOR_NEW_PADDLE) {
-            return new NewPaddleStrategy(gameObjects, counter);
-        } else if (result == PROBABILITY_FOR_EXPLOSION) {
-            return new ExplosionStrategy(gameObjects, counter);
-        } else if (result == PROBABILITY_FOR_NEW_LIFE) {
-            return new NewLifeStrategy(gameObjects, counter);
-        }
-        // else, result = 9, and we get a double behavior:
-        return new DoubleStrategy(getStrategyOrDouble(depth + RECURSION_STEP),
-                getStrategyOrDouble(depth + RECURSION_STEP));
+//        } else if (result == PROBABILITY_FOR_NEW_PADDLE) {
+//            return new NewPaddleStrategy(gameObjects, counter);
+//        } else if (result == PROBABILITY_FOR_EXPLOSION) {
+//            return new ExplosionStrategy(gameObjects, counter);
+//        } else if (result == PROBABILITY_FOR_NEW_LIFE) {
+//            return new NewLifeStrategy(gameObjects, counter);
+//        }
+//        // else, result = 9, and we get a double behavior:
+//        return new DoubleStrategy(getStrategyOrDouble(depth + RECURSION_STEP),
+//                getStrategyOrDouble(depth + RECURSION_STEP));
     }
 }

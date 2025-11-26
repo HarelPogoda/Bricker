@@ -12,7 +12,7 @@ import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.util.Vector2;
 
-public class PucksStartegy implements CollisionStrategy {
+public class PucksStrategy implements CollisionStrategy {
 
     private final GameObjectCollection gameObjectCollection;
     private final Counter brickCounter;
@@ -25,7 +25,7 @@ public class PucksStartegy implements CollisionStrategy {
     static final float PUCK_RADIUS = 7.5f; // instructions are that puck is 3/4 of the regular ball,
                                             // don't change
 
-    public PucksStartegy(GameObjectCollection gameObjectCollection, Counter brickCounter,
+    public PucksStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter,
                          ImageReader imageReader, SoundReader soundReader) {
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;
@@ -35,8 +35,9 @@ public class PucksStartegy implements CollisionStrategy {
 
     @Override
     public void onCollision(GameObject gameobject1, GameObject gameobject2) {
-        gameObjectCollection.removeGameObject(gameobject1, Layer.STATIC_OBJECTS);
-        brickCounter.decrement();
+        if (gameObjectCollection.removeGameObject(gameobject1, Layer.STATIC_OBJECTS)) {
+            brickCounter.decrement();
+        }
         createPuck(gameobject2.getCenter());
         createPuck(gameobject2.getCenter());
     }

@@ -1,6 +1,6 @@
 package bricker.main;
 
-import bricker.brick_strategies.BrickStrategyFactory;
+import bricker.brick_strategies.BrickStrategiesFactory;
 import bricker.brick_strategies.CollisionStrategy;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -239,7 +239,7 @@ public class BrickerGameManager extends GameManager{
     private void createBricks() {
     Renderable renderable = imageReader.readImage(BRICK_PATH, false);
     this.brickCounter = new Counter(0);
-    BrickStrategyFactory factory = new BrickStrategyFactory(this.gameObjects(), this.brickCounter,
+    BrickStrategiesFactory factory = new BrickStrategiesFactory(this.gameObjects(), this.brickCounter,
             imageReader, soundReader, inputListener, windowDimensions);
 
     float totalAvailableWidth = SCREEN_WIDTH - (2 * WALL_WIDTH) - ((bricksPerRow - 1) * SPACE_BETWEEN_OBJECTS);
