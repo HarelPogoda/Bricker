@@ -1,8 +1,7 @@
 package bricker.brick_strategies;
 
 import java.util.Random;
-import bricker.gameobjects.Ball;
-import danogl.GameObject;
+
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
 import danogl.gui.Sound;
@@ -11,6 +10,9 @@ import danogl.util.Counter;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.util.Vector2;
+
+import bricker.gameobjects.Ball;
+import danogl.GameObject;
 
 public class PucksStrategy implements CollisionStrategy {
 
@@ -34,12 +36,12 @@ public class PucksStrategy implements CollisionStrategy {
     }
 
     @Override
-    public void onCollision(GameObject gameobject1, GameObject gameobject2) {
-        if (gameObjectCollection.removeGameObject(gameobject1, Layer.STATIC_OBJECTS)) {
+    public void onCollision(GameObject firstObject, danogl.GameObject otherObject) {
+        if (gameObjectCollection.removeGameObject(firstObject, Layer.STATIC_OBJECTS)) {
             brickCounter.decrement();
         }
-        createPuck(gameobject2.getCenter());
-        createPuck(gameobject2.getCenter());
+        createPuck(otherObject.getCenter());
+        createPuck(otherObject.getCenter());
     }
 
     /**

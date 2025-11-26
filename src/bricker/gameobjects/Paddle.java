@@ -14,7 +14,11 @@ import java.awt.event.KeyEvent;
  * @author Nehorai Amrusi, Harel Pogoda
  */
 public class Paddle extends GameObject {
+
+    static final int PADDLE_WIDTH = 100;
+    static final int PADDLE_HEIGHT = 15;
     private static final float MOVEMENT_SPEED = 400f;
+
     private UserInputListener inputListener;
     private float leftBoundary;
     private float rightBoundary;
@@ -23,18 +27,17 @@ public class Paddle extends GameObject {
      * Construct a new GameObject instance.
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
      *                      Note that (0,0) is the top-left corner of the window.
-     * @param dimensions    Width and height in window coordinates.
      * @param renderable    The renderable representing the object. Can be null, in which case
      * @param inputListener
      * @param minX          The left boundary for paddle movement
      * @param maxX          The right boundary for paddle movement
      */
-    public Paddle(Vector2 topLeftCorner, Vector2 dimensions,
+    public Paddle(Vector2 topLeftCorner,
                       Renderable renderable, UserInputListener inputListener,
                         float minX, float maxX) {
         this.leftBoundary = minX;
         this.rightBoundary = maxX;
-        super(topLeftCorner, dimensions, renderable);
+        super(topLeftCorner, new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT), renderable);
         this.inputListener = inputListener;
     }
 

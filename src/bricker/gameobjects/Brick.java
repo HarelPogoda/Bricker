@@ -1,10 +1,10 @@
 package bricker.gameobjects;
 
 import bricker.brick_strategies.CollisionStrategy;
-import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+import danogl.GameObject;
 
 public class Brick extends GameObject {
 
@@ -13,7 +13,7 @@ public class Brick extends GameObject {
     private final CollisionStrategy collisionstrategy;
 
     public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
-                 int row, int col, CollisionStrategy collisionstrategy) {
+                      int row, int col, CollisionStrategy collisionstrategy) {
         super(topLeftCorner, dimensions, renderable);
         this.row = row;
         this.col = col;
@@ -23,7 +23,7 @@ public class Brick extends GameObject {
     @Override
     public void onCollisionEnter(GameObject otherObject, Collision collision) {
         super.onCollisionEnter(otherObject, collision);
-        this.collisionstrategy.onCollision(this, otherObject);
+        this.collisionstrategy.onCollision((GameObject) this, otherObject);
     }
 
 

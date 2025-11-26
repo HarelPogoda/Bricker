@@ -2,8 +2,8 @@ package bricker.main;
 
 import bricker.brick_strategies.BrickStrategiesFactory;
 import bricker.brick_strategies.CollisionStrategy;
+import bricker.gameobjects.Brick;
 import danogl.GameManager;
-import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.components.CoordinateSpace;
 import danogl.gui.*;
@@ -12,7 +12,7 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Counter;
 import danogl.util.Vector2;
 import bricker.gameobjects.Ball;
-import bricker.gameobjects.Brick;
+import danogl.GameObject;
 import bricker.gameobjects.Paddle;
 
 import java.awt.*;
@@ -251,7 +251,7 @@ public class BrickerGameManager extends GameManager{
             float y = WALL_WIDTH + (row * (BRICK_HEIGHT + SPACE_BETWEEN_OBJECTS));
 
             CollisionStrategy collisionStrategy = factory.getStrategy();
-            Brick brick = new Brick(
+            GameObject brick = new Brick(
                     new Vector2(x, y),
                     new Vector2(brickWidth, BRICK_HEIGHT),
                     renderable,row,column,
@@ -309,16 +309,15 @@ public class BrickerGameManager extends GameManager{
      */
     private void createPaddle() {
         Renderable paddleImage = imageReader.readImage(PADDLE_IMAGE_PATH, true);
-        GameObject paddle = new Paddle(
+        danogl.GameObject paddle = new Paddle(
                 Vector2.ZERO,
-                new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT),
                 paddleImage,
                 inputListener,
                 SCREEN_FIRST_COLUMN,  // minX
                 windowDimensions.x()); // maxX
 
         paddle.setCenter(
-                new Vector2(windowDimensions.x()/2, (int)windowDimensions.y()-30));
+                new Vector2(windowDimensions.x()/2, windowDimensions.y()-30));
 
         gameObjects().addGameObject(paddle);
     }
@@ -328,17 +327,17 @@ public class BrickerGameManager extends GameManager{
      * Generates three walls: Left, Right, and Top, using the defined wall width and color.
      */
     private void createWalls() {
-        GameObject leftWall = new GameObject(
+        danogl.GameObject leftWall = new danogl.GameObject(
                 Vector2.ZERO,
                 new Vector2(WALL_WIDTH, SCREEN_HEIGHT),
                 new RectangleRenderable(WALLS_COLOR));
 
-        GameObject rightWall = new GameObject(
+        danogl.GameObject rightWall = new danogl.GameObject(
                 new Vector2(RIGHT_WALL_LEFT_COLUMN, SCREEN_FIRST_ROW),
                 new Vector2(WALL_WIDTH, SCREEN_HEIGHT),
                 new RectangleRenderable(WALLS_COLOR));
 
-        GameObject topWall = new GameObject(
+        danogl.GameObject topWall = new danogl.GameObject(
                 new Vector2(SCREEN_FIRST_COLUMN, SCREEN_FIRST_ROW),
                 new Vector2(SCREEN_WIDTH, WALL_WIDTH),
                 new RectangleRenderable(WALLS_COLOR));
@@ -355,7 +354,7 @@ public class BrickerGameManager extends GameManager{
      */
     private void createBackground() {
         Renderable backgroundImage = imageReader.readImage(BACKGROUND_IMAGE_PATH, false);
-        GameObject backGround = new GameObject(
+        danogl.GameObject backGround = new danogl.GameObject(
                 Vector2.ZERO,
                 new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT),
                 backgroundImage);

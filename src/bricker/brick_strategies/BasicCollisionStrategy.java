@@ -1,9 +1,10 @@
 package bricker.brick_strategies;
 
-import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
 import danogl.util.Counter;
+
+import danogl.GameObject;
 
 public class BasicCollisionStrategy implements CollisionStrategy{
     static final String COLLISION_MESSAGE = "collision with brick detected";
@@ -17,10 +18,10 @@ public class BasicCollisionStrategy implements CollisionStrategy{
     }
 
     @Override
-    public void onCollision(GameObject gameobject1, GameObject gameobject2) {
+    public void onCollision(GameObject firstObject, danogl.GameObject otherObject) {
         // note: this was changed, as if 2 balls hit the brick at the same time only
         // one will remove the brick and decrement the count; the other will return false
-        if (gameObjectCollection.removeGameObject(gameobject1, Layer.STATIC_OBJECTS)) {
+        if (gameObjectCollection.removeGameObject(firstObject, Layer.STATIC_OBJECTS)) {
             brickCounter.decrement();
         }
     }

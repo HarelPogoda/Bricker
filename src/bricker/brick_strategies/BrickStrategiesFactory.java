@@ -20,12 +20,13 @@ public class BrickStrategiesFactory {
     static final int RECURSION_STEP = 1;
 
     private final GameObjectCollection gameObjects;
-    private final Counter counter;
+    private final Counter brickCounter;
     private final ImageReader imageReader;
     private final SoundReader soundReader;
     private final UserInputListener inputListener;
     private final Vector2 windowDimensions;
     private static final Random rand = new Random();
+    private final Counter extraPaddleCounter;
 
     public BrickStrategiesFactory(GameObjectCollection gameObjectCollection,
                                   Counter brickCounter,
@@ -34,11 +35,12 @@ public class BrickStrategiesFactory {
                                   UserInputListener inputListener,
                                   Vector2 windowDimensions) {
         this.gameObjects = gameObjectCollection;
-        this.counter = brickCounter;
+        this.brickCounter = brickCounter;
         this.imageReader = imageReader;
         this.soundReader = soundReader;
         this.inputListener = inputListener;
         this.windowDimensions = windowDimensions;
+        this.extraPaddleCounter = new Counter(0);
     }
 
     public CollisionStrategy getStrategy(){
@@ -55,11 +57,12 @@ public class BrickStrategiesFactory {
         }
 
         if (result < PROBABILITY_FOR_REGULAR) { // 50% (0,1,2,3,4)
-            return new BasicCollisionStrategy(gameObjects, counter);
-        } //else if (result == PROBABILITY_FOR_PUCKS) {
-            return new PucksStrategy(gameObjects, counter, imageReader, soundReader);
-//        } else if (result == PROBABILITY_FOR_NEW_PADDLE) {
-//            return new NewPaddleStrategy(gameObjects, counter);
+            return new BasicCollisionStrategy(gameObjects, brickCounter);
+        } else if (result == PROBABILITY_FOR_PUCKS) {
+            return new PucksStrategy(gameObjects, brickCounter, imageReader, soundReader);
+        }// else if (result == PROBABILITY_FOR_NEW_PADDLE) {
+            return new ExtraPaddleStrategy(gameObjects, brickCounter, imageReader,
+                    windowDimensions, inputListener, extraPaddleCounter);
 //        } else if (result == PROBABILITY_FOR_EXPLOSION) {
 //            return new ExplosionStrategy(gameObjects, counter);
 //        } else if (result == PROBABILITY_FOR_NEW_LIFE) {
