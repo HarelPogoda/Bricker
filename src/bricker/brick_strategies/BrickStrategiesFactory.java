@@ -92,11 +92,11 @@ public class BrickStrategiesFactory {
         } else if (result == PROBABILITY_FOR_NEW_PADDLE) {
             return new ExtraPaddleStrategy(gameObjects, brickCounter, imageReader,
                     windowDimensions, inputListener, extraPaddleCounter);
-        } //else if (result == PROBABILITY_FOR_EXPLOSION) {
-//            return new ExplosionStrategy(gameObjects, brickCounter);
-//        } else if (result == PROBABILITY_FOR_NEW_LIFE) {
-//            return new NewLifeStrategy(gameObjects, brickCounter);
-//        }
+        } else if (result == PROBABILITY_FOR_EXPLOSION) {
+            return new ExplosionStrategy(gameObjects, brickCounter);
+        } else if (result == PROBABILITY_FOR_NEW_LIFE) {
+            return new NewLifeStrategy(gameObjects, brickCounter);
+        }
         // else, result = 9, and we get a double behavior.
         doublesCounter++;
         return new DoubleStrategy(getStrategyOrDouble(), getStrategyOrDouble());
