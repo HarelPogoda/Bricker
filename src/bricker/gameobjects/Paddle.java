@@ -19,9 +19,9 @@ public class Paddle extends GameObject {
     static final int PADDLE_HEIGHT = 15;
     private static final float MOVEMENT_SPEED = 400f;
 
-    private UserInputListener inputListener;
-    private float leftBoundary;
-    private float rightBoundary;
+    private final UserInputListener inputListener;
+    private final float leftBoundary;
+    private final float rightBoundary;
 
     /**
      * Construct a new paddle instance.
@@ -33,11 +33,12 @@ public class Paddle extends GameObject {
      * @param maxX                  The right boundary for paddle movement
      */
     public Paddle(Vector2 topLeftCorner,
-                      Renderable renderable, UserInputListener inputListener,
-                        float minX, float maxX) {
+                  Renderable renderable,
+                  UserInputListener inputListener,
+                  float minX, float maxX) {
+        super(topLeftCorner, new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT), renderable);
         this.leftBoundary = minX;
         this.rightBoundary = maxX;
-        super(topLeftCorner, new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT), renderable);
         this.inputListener = inputListener;
     }
 

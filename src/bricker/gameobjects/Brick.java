@@ -25,8 +25,11 @@ public class Brick extends GameObject {
      * @param col               column of the brick on the screen, relative to other bricks.
      * @param collisionstrategy What happens when something hits the brick.
      */
-    public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
-                      int row, int col, CollisionStrategy collisionstrategy) {
+    public Brick(Vector2 topLeftCorner,
+                 Vector2 dimensions,
+                 Renderable renderable,
+                 int row, int col,
+                 CollisionStrategy collisionstrategy) {
         super(topLeftCorner, dimensions, renderable);
         this.row = row;
         this.col = col;

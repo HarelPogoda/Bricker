@@ -24,7 +24,7 @@ public class ExtraPaddleStrategy implements CollisionStrategy {
     private final ImageReader imageReader;
     private final Vector2 windowDimensions;
     private final UserInputListener inputListener;
-    private Counter extraPaddleCounter;
+    private final Counter extraPaddleCounter;
 
     /**
      * Constructor for the extra paddle strategy.
@@ -34,8 +34,11 @@ public class ExtraPaddleStrategy implements CollisionStrategy {
      * @param inputListener        To move the paddle
      * @param windowDimensions     size of the screen
      */
-    public ExtraPaddleStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter,
-                               ImageReader imageReader, Vector2 windowDimensions, UserInputListener inputListener,
+    public ExtraPaddleStrategy(GameObjectCollection gameObjectCollection,
+                               Counter brickCounter,
+                               ImageReader imageReader,
+                               Vector2 windowDimensions,
+                               UserInputListener inputListener,
                                Counter extraPaddleCounter) {
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;

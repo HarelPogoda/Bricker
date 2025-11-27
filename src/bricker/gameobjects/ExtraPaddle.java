@@ -9,6 +9,10 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Counter;
 import danogl.util.Vector2;
 
+import bricker.main.Constants;
+
+import java.util.Objects;
+
 /**
  * An extra paddle to be displayed on top of the main one.
  * This one has a collision counter, and when the counter reaches the ceiling the
@@ -34,8 +38,10 @@ public class ExtraPaddle extends Paddle{
      *                              starts and terminates.
      */
     public ExtraPaddle(Vector2 topLeftCorner,
-                  Renderable renderable, UserInputListener inputListener,
-                  float minX, float maxX, GameObjectCollection gameObjectCollection,
+                       Renderable renderable,
+                       UserInputListener inputListener,
+                       float minX, float maxX,
+                       GameObjectCollection gameObjectCollection,
                        Counter extraPaddleCounter) {
         super(topLeftCorner, renderable, inputListener, minX, maxX);
         this.gameObjectCollection = gameObjectCollection;
@@ -45,7 +51,7 @@ public class ExtraPaddle extends Paddle{
     }
 
     /**
-     * Upon collision, this is invoked and counts another collision with the
+     * Upon collision with a ball, this method is invoked and counts another collision with the
      * ExtraPaddle.
      * @param other      what the ExtraPaddle collided with.
      * @param collision  A collision event.
@@ -53,7 +59,9 @@ public class ExtraPaddle extends Paddle{
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        collisionCounter++;
+        if (!Objects.equals(other.getTag(), Constants.NO_COLLIDE_TAG)) {
+            collisionCounter++;
+        }
         if (collisionCounter == PADDLE_LIVES) {
             gameObjectCollection.removeGameObject(this, Layer.DEFAULT);
             extraPaddleCounter.decrement();

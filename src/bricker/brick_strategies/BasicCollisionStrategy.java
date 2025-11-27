@@ -20,7 +20,8 @@ public class BasicCollisionStrategy implements CollisionStrategy{
      * @param gameObjectCollection The list which from the brick is to be erased
      * @param brickCounter         The counter to decrement
      */
-    public BasicCollisionStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter) {
+    public BasicCollisionStrategy(GameObjectCollection gameObjectCollection,
+                                  Counter brickCounter) {
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;
     }

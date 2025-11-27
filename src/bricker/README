@@ -31,4 +31,6 @@ them when the brick is hit. We enforced the N-behaviors limitation (in our case 
 number to the factory's method getStrategy; then - because a tree of N leafs has N-1 leafs -
 we limited the amount of double behaviors to N-1 with a counter, and used a recursion that checks the
 counter every time it's called.
+Note: We added a Constants class. This class holds only constants that are shared between classes;
+constants that are relevant to one class only are in that class - keeping encapsulation.
 

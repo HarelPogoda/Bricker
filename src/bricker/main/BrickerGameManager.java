@@ -43,10 +43,7 @@ public class BrickerGameManager extends GameManager{
 
     static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 500;
-    static final float BALL_RADIUS = 10f; // instructions are that the ball will be 20*20, don't change
     static final float BALL_SPEED = 100f;
-    static final int PADDLE_WIDTH = 100;
-    static final int PADDLE_HEIGHT = 15;
     static final float BALL_START_COORDINATES = 0.5f;
     static final int SCREEN_FIRST_ROW = 0;
     static final float SCREEN_FIRST_COLUMN = 0f;
@@ -158,10 +155,8 @@ public class BrickerGameManager extends GameManager{
      */
     private void createHearts() {
         Vector2 windowDimensions = windowController.getWindowDimensions();
-
         Vector2 heartPos = new Vector2(HEARTS_X_POS, windowDimensions.y() - HEARTS_Y_MARGIN);
         Vector2 heartDims = new Vector2(HEARTS_WIDTH, HEARTS_HEIGHT);
-
         Renderable heartImage = imageReader.readImage(HEART_PATH, true);
 
         GraphicLifeCounter graphicLifeCounter = new GraphicLifeCounter(
@@ -185,7 +180,6 @@ public class BrickerGameManager extends GameManager{
         );
 
         gameObjects().addGameObject(numericLifeCounter, Layer.UI);
-
         this.graphicLifeCounter = graphicLifeCounter;
         this.numericLifeCounter = numericLifeCounter;
     }
@@ -299,7 +293,7 @@ public class BrickerGameManager extends GameManager{
         Renderable ballImage = imageReader.readImage(BALL_IMAGE_PATH, true);
         Sound collisionSound = soundReader.readSound(BLOP_PATH);
         this.ball = new Ball(
-                Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), ballImage, collisionSound);
+                Vector2.ZERO, new Vector2(Constants.BALL_RADIUS, Constants.BALL_RADIUS), ballImage, collisionSound);
 
         ball.setCenter(windowDimensions.mult(BALL_START_COORDINATES));
         gameObjects().addGameObject(ball);
@@ -335,16 +329,19 @@ public class BrickerGameManager extends GameManager{
                 Vector2.ZERO,
                 new Vector2(WALL_WIDTH, SCREEN_HEIGHT),
                 new RectangleRenderable(WALLS_COLOR));
+        leftWall.setTag(Constants.NO_COLLIDE_TAG);
 
         danogl.GameObject rightWall = new danogl.GameObject(
                 new Vector2(RIGHT_WALL_LEFT_COLUMN, SCREEN_FIRST_ROW),
                 new Vector2(WALL_WIDTH, SCREEN_HEIGHT),
                 new RectangleRenderable(WALLS_COLOR));
+        rightWall.setTag(Constants.NO_COLLIDE_TAG);
 
         danogl.GameObject topWall = new danogl.GameObject(
                 new Vector2(SCREEN_FIRST_COLUMN, SCREEN_FIRST_ROW),
                 new Vector2(SCREEN_WIDTH, WALL_WIDTH),
                 new RectangleRenderable(WALLS_COLOR));
+        topWall.setTag(Constants.NO_COLLIDE_TAG);
 
         gameObjects().addGameObject(leftWall);
         gameObjects().addGameObject(rightWall);

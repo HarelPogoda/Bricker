@@ -16,7 +16,8 @@ public class DoubleStrategy implements CollisionStrategy {
      * @param collisionStrategy1 The first behavior to be invoked.
      * @param collisionStrategy2 The second behavior to be invoked.
      */
-    public DoubleStrategy(CollisionStrategy collisionStrategy1, CollisionStrategy collisionStrategy2) {
+    public DoubleStrategy(CollisionStrategy collisionStrategy1,
+                          CollisionStrategy collisionStrategy2) {
         this.collisionStrategy1 = collisionStrategy1;
         this.collisionStrategy2 = collisionStrategy2;
     }

@@ -2,6 +2,7 @@ package bricker.brick_strategies;
 
 import java.util.Random;
 
+import bricker.main.Constants;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
 import danogl.gui.Sound;
@@ -29,8 +30,8 @@ public class PucksStrategy implements CollisionStrategy {
     private static final String PUCK_IMAGE_PATH = "assets/mockBall.png";
     private static final String BLOP_PATH = "assets/blop.wav";
     private static final float PUCK_SPEED = 150f; // faster than the regular ball
-    private static final float PUCK_RADIUS = 7.5f; // instructions are that puck is 3/4 of the regular ball,
-                                            // don't change
+    private static final float PUCK_RADIUS = 0.75f * Constants.BALL_RADIUS; // instructions
+                                // are that puck is 3/4 of the regular ball, don't change
 
     /**
      * Constructor for the pucks strategy.
@@ -39,8 +40,10 @@ public class PucksStrategy implements CollisionStrategy {
      * @param imageReader          An image reader to read the puck image.
      * @param soundReader          A sound reader to read the puck collision sound.
      */
-    public PucksStrategy(GameObjectCollection gameObjectCollection, Counter brickCounter,
-                         ImageReader imageReader, SoundReader soundReader) {
+    public PucksStrategy(GameObjectCollection gameObjectCollection,
+                         Counter brickCounter,
+                         ImageReader imageReader,
+                         SoundReader soundReader) {
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;
         this.imageReader = imageReader;
