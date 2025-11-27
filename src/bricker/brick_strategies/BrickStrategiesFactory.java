@@ -9,7 +9,7 @@ import danogl.util.Counter;
 import danogl.util.Vector2;
 
 /**
- * A factory to return all the behaviors (strategies) that a brick can have.
+ * A factory to return all the behaviors (strategies) a brick can have.
  * it initializes a strategy and returns it using the getStrategy function.
  * @author Nehorai Amrusi, Harel Pogoda
  */
@@ -33,6 +33,15 @@ public class BrickStrategiesFactory {
     private int doublesCounter;
     private int doublesAllowed;
 
+    /**
+     * Constructor for the factory
+     * @param gameObjectCollection list of objects in the game
+     * @param brickCounter         number of bricks in the game
+     * @param imageReader          image reader (used for the behaviors)
+     * @param soundReader          sound reader for sounds for the different behaviors
+     * @param inputListener        Some behaviors, like extra paddle, might need this
+     * @param windowDimensions     size of the screen
+     */
     public BrickStrategiesFactory(GameObjectCollection gameObjectCollection,
                                   Counter brickCounter,
                                   ImageReader imageReader,
@@ -63,7 +72,7 @@ public class BrickStrategiesFactory {
         return strategy;
     }
 
-    /**
+    /*
      * The distribution of strategies is defined in the exercise: 10 percent for each
      * special strategy, and 50 for the basic one (just erase the brick from the game).
      */

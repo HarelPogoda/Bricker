@@ -24,13 +24,13 @@ public class Paddle extends GameObject {
     private float rightBoundary;
 
     /**
-     * Construct a new GameObject instance.
-     * @param topLeftCorner Position of the object, in window coordinates (pixels).
-     *                      Note that (0,0) is the top-left corner of the window.
-     * @param renderable    The renderable representing the object. Can be null, in which case
-     * @param inputListener
-     * @param minX          The left boundary for paddle movement
-     * @param maxX          The right boundary for paddle movement
+     * Construct a new paddle instance.
+     * @param topLeftCorner         Position of the paddle, in window coordinates (pixels).
+     *                              Note that (0,0) is the top-left corner of the window.
+     * @param renderable            The renderable representing the paddle.
+     * @param inputListener         Needed to connect the paddle to the arrows.
+     * @param minX                  The left boundary for paddle movement
+     * @param maxX                  The right boundary for paddle movement
      */
     public Paddle(Vector2 topLeftCorner,
                       Renderable renderable, UserInputListener inputListener,

@@ -41,7 +41,7 @@ public class NumericLifeCounter extends GameObject {
         updateColor();
     }
 
-    /**
+    /*
      * Updates the color of the text based on the remaining lives.
      * Green for 3 or more, Yellow for 2, Red for 1.
      */

@@ -220,6 +220,10 @@ public class BrickerGameManager extends GameManager{
         }
     }
 
+    /**
+     * A handler for ending the game.
+     * @param prompt A prompt to show the user when the game ends.
+     */
     private void handleGameEnd(String prompt) {
         if (windowController.openYesNoDialog(prompt)) {
             windowController.resetGame();
