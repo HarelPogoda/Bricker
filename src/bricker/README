@@ -28,9 +28,11 @@ COMPLETE: EXPLOSION AND EXTRA LIVESS
 
 4. We implemented the double behavior using a decorator that holds two other behaviors, and invokes
 them when the brick is hit. We enforced the N-behaviors limitation (in our case it's 3) by passing the
-number to the factory's method getStrategy; then - because a tree of N leafs has N-1 leafs -
-we limited the amount of double behaviors to N-1 with a counter, and used a recursion that checks the
-counter every time it's called.
+number to the factory's method getStrategy. The maximum number of behaviors allowed is defined in
+the game manager to allow changing it with minimum code changed. Because a tree of N leafs has N-1 nodes,
+we limited the amount of double behaviors to N-1 using a counter - and used a recursive function that
+checks that counter every time it's called.
+
 Note: We added a Constants class. This class holds only constants that are shared between classes;
 constants that are relevant to one class only are in that class - keeping encapsulation.
 
