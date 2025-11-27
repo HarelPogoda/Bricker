@@ -1,0 +1,34 @@
+pudusv._1107,COMPLETE CSE USERNAME
+211525860,COMPLETE
+
+1. COMPLETE -
+כתבו איזה עיצוב בחרתם בחלק 1.7 כדי לאפשר העלמת לבנים במשחק, והסבירו מה הם היתרונות והחסרונות
+של הבחירה העיצובית שלכם
+
+2. COMPLETE -
+הסבירו איך מימשתם את הצגת מספר החיים של השחקן )גרפי ונומרי( מחלק 1.8 של התרגיל. הסבירו בקצרה מה
+תפקידה של כל מחלקה שהוספתם בקוד
+
+3. We used a strategy design pattern: we have a BrickStrategiesFactory factory that chooses the
+strategy according to the distribution described in the exercise. It creates a strategy object,
+and returns it. Every brick contains ("has-a") strategy. All strategies implement the
+CollisionStrategy interface, so the brick just has to invoke the onCollision method upon collision.
+Puck -
+We create a Ball with different arguments, since our pucks differs from a ball only in image and
+size. The game manager knows who is the main ball, since it created it - so it knows to
+decrement lives only when the main ball leaves the screen.
+Extra paddle -
+We created an ExtraPaddle class, which inherits from the Paddle class; this is due to the fact
+that the relation between the two is an "is-a" (the extra paddle is still a paddle). The extra
+paddle adds a counter to erase it when it had 4 collisions, and of course is initialized with
+different parameters. The factory knows when an extra paddle already exists via a counter, and it
+passes it to the ExtraPaddleStrategy and then to the extra paddle to notify him when it's
+terminating itself.
+COMPLETE: EXPLOSION AND EXTRA LIVESS
+
+4. We implemented the double behavior using a decorator that holds two other behaviors, and invokes
+them when the brick is hit. We enforced the N-behaviors limitation (in our case it's 3) by passing the
+number to the factory's method getStrategy; then - because a tree of N leafs has N-1 leafs -
+we limited the amount of double behaviors to N-1 with a counter, and used a recursion that checks the
+counter every time it's called.
+

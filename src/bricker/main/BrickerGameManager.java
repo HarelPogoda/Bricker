@@ -64,6 +64,7 @@ public class BrickerGameManager extends GameManager{
     private static final float HEARTS_HEIGHT = 25f;
     private static final float LIVES_SPACING = 20f;
     private static final float NUMERIC_COUNTER_SIZE = 25f;
+    private static final int BEHAVIORS_ALLOWED = 3;
 
 
     private Vector2 windowDimensions;
@@ -228,7 +229,6 @@ public class BrickerGameManager extends GameManager{
     }
 
 
-
     /**
      * Initializes and constructs the grid of bricks for the game level.
      * This method calculates the width of each brick based on the screen width and the requested
@@ -250,7 +250,7 @@ public class BrickerGameManager extends GameManager{
             float x = WALL_WIDTH + (column * (brickWidth + SPACE_BETWEEN_OBJECTS));
             float y = WALL_WIDTH + (row * (BRICK_HEIGHT + SPACE_BETWEEN_OBJECTS));
 
-            CollisionStrategy collisionStrategy = factory.getStrategy();
+            CollisionStrategy collisionStrategy = factory.getStrategy(BEHAVIORS_ALLOWED);
             GameObject brick = new Brick(
                     new Vector2(x, y),
                     new Vector2(brickWidth, BRICK_HEIGHT),

@@ -13,7 +13,6 @@ import danogl.util.Vector2;
 public class ExtraPaddleStrategy implements CollisionStrategy {
     static final String PADDLE_IMAGE_PATH = "assets/paddle.png";
 
-    static boolean extraPaddleExists = false;
     private final GameObjectCollection gameObjectCollection;
     private final Counter brickCounter;
     private final ImageReader imageReader;
