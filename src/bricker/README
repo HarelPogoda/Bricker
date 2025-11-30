@@ -1,13 +1,28 @@
 pudusv._1107,COMPLETE CSE USERNAME
 211525860,COMPLETE
 
-1. COMPLETE -
-כתבו איזה עיצוב בחרתם בחלק 1.7 כדי לאפשר העלמת לבנים במשחק, והסבירו מה הם היתרונות והחסרונות
-של הבחירה העיצובית שלכם
 
-2. COMPLETE -
-הסבירו איך מימשתם את הצגת מספר החיים של השחקן )גרפי ונומרי( מחלק 1.8 של התרגיל. הסבירו בקצרה מה
-תפקידה של כל מחלקה שהוספתם בקוד
+1. To handle collisions
+and brick removal, we selected the Strategy Pattern.
+Instead of implementing logic directly within the Brick class,
+we defined a CollisionStrategy interface,
+where each brick holds a different strategy object make by the factory and delegates the collision handling (onCollision) to it.
+The main advantage is the Open/Closed Principle: new behaviors (such as explosions or extra lives)
+can be added easily without modifying existing Brick code, ensuring decoupling. The disadvantage
+is the added complexity resulting from the increased number of classes and the need to pass multiple
+dependencies (such as counters and object collections) through constructors to the various strategies
+without the option to send directly functions from the game manger.
+
+2.The life display was implemented using two dedicated classes,
+GraphicLifeCounter and NumericLifeCounter, both holding a reference
+to the same shared Counter object managed by the GameManager.
+The implementation relies on state polling within the update loop:
+in every frame, the classes independently check if the counter value has changed.
+GraphicLifeCounter handles the visual aspect by dynamically updating the array of
+heart objects (adding/removing them from the screen) according to the current life count,
+while NumericLifeCounter manages the text display, updating the number and its color
+(Green/Yellow/Red) based on the current status. This approach ensures full synchronization
+with a single source of truth without requiring manual updates from the game manager.
 
 3. We used a strategy design pattern: we have a BrickStrategiesFactory factory that chooses the
 strategy according to the distribution described in the exercise. It creates a strategy object,

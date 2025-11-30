@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import danogl.GameObject;
 import bricker.gameobjects.ExtraPaddle;
 import danogl.collisions.GameObjectCollection;
@@ -25,6 +26,7 @@ public class ExtraPaddleStrategy implements CollisionStrategy {
     private final Vector2 windowDimensions;
     private final UserInputListener inputListener;
     private final Counter extraPaddleCounter;
+    private final Brick[][] brickGrid;
 
     /**
      * Constructor for the extra paddle strategy.
@@ -39,13 +41,14 @@ public class ExtraPaddleStrategy implements CollisionStrategy {
                                ImageReader imageReader,
                                Vector2 windowDimensions,
                                UserInputListener inputListener,
-                               Counter extraPaddleCounter) {
+                               Counter extraPaddleCounter, Brick[][] brickGrid) {
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;
         this.imageReader = imageReader;
         this.windowDimensions = windowDimensions;
         this.inputListener = inputListener;
         this.extraPaddleCounter = extraPaddleCounter;
+        this.brickGrid = brickGrid;
     }
 
     /**
@@ -57,6 +60,10 @@ public class ExtraPaddleStrategy implements CollisionStrategy {
     public void onCollision(GameObject firstObject, danogl.GameObject otherObject) {
         if (gameObjectCollection.removeGameObject(firstObject, Layer.STATIC_OBJECTS)) {
             brickCounter.decrement();
+            Brick myBrick = (Brick) firstObject;
+            int row = myBrick.getRow();
+            int col = myBrick.getCol();
+            brickGrid[row][col] = null;
         }
         if (extraPaddleCounter.value() == 0) {
             Renderable paddleImage = imageReader.readImage(PADDLE_IMAGE_PATH, true);

@@ -1,6 +1,9 @@
 package bricker.brick_strategies;
 
 import java.util.Random;
+
+import bricker.gameobjects.Brick;
+import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
@@ -32,7 +35,9 @@ public class BrickStrategiesFactory {
     private final Counter extraPaddleCounter;
     private int doublesCounter;
     private int doublesAllowed;
-
+    private final Brick[][] brickGrid;
+    private Counter lifeCounter;
+    private final GameObject mainPaddle;
     /**
      * Constructor for the factory
      * @param gameObjectCollection list of objects in the game
@@ -47,7 +52,11 @@ public class BrickStrategiesFactory {
                                   ImageReader imageReader,
                                   SoundReader soundReader,
                                   UserInputListener inputListener,
-                                  Vector2 windowDimensions) {
+                                  Vector2 windowDimensions,
+                                  Brick[][] brickGrid,
+                                  Counter lifeCounter,
+                                  GameObject mainPaddle) {
+        this.brickGrid = brickGrid;
         this.gameObjects = gameObjectCollection;
         this.brickCounter = brickCounter;
         this.imageReader = imageReader;
@@ -55,6 +64,8 @@ public class BrickStrategiesFactory {
         this.inputListener = inputListener;
         this.windowDimensions = windowDimensions;
         this.extraPaddleCounter = new Counter(0);
+        this.lifeCounter = lifeCounter;
+        this.mainPaddle = mainPaddle;
         doublesCounter = 0;
     }
 
@@ -86,19 +97,24 @@ public class BrickStrategiesFactory {
         }
 
         if (result < PROBABILITY_FOR_REGULAR) {
-            return new BasicCollisionStrategy(gameObjects, brickCounter);
+            return new BasicCollisionStrategy(gameObjects, brickCounter,brickGrid);
         } else if (result == PROBABILITY_FOR_PUCKS) {
-            return new PucksStrategy(gameObjects, brickCounter, imageReader, soundReader);
+            return new PucksStrategy(gameObjects, brickCounter, imageReader, soundReader,brickGrid);
         } else if (result == PROBABILITY_FOR_NEW_PADDLE) {
             return new ExtraPaddleStrategy(gameObjects, brickCounter, imageReader,
-                    windowDimensions, inputListener, extraPaddleCounter);
+                    windowDimensions, inputListener, extraPaddleCounter,brickGrid);
         } else if (result == PROBABILITY_FOR_EXPLOSION) {
-            return new ExplosionStrategy(gameObjects, brickCounter);
+            return new ExplosionStrategy(gameObjects, brickCounter,soundReader,brickGrid);
         } else if (result == PROBABILITY_FOR_NEW_LIFE) {
-            return new NewLifeStrategy(gameObjects, brickCounter);
+            return new NewLifeStrategy(gameObjects, brickCounter,brickGrid,imageReader,lifeCounter,mainPaddle,windowDimensions);
         }
-        // else, result = 9, and we get a double behavior.
+//         else, result = 9, and we get a double behavior.
         doublesCounter++;
         return new DoubleStrategy(getStrategyOrDouble(), getStrategyOrDouble());
+//        int a = rand.nextInt(2);
+//        if(a==0 ) {
+//            return new ExplosionStrategy(gameObjects, brickCounter, soundReader, brickGrid);
+//        }
+//        else {return new BasicCollisionStrategy(gameObjects, brickCounter,brickGrid);}
     }
 }

@@ -2,6 +2,7 @@ package bricker.brick_strategies;
 
 import java.util.Random;
 
+import bricker.gameobjects.Brick;
 import bricker.main.Constants;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
@@ -26,6 +27,7 @@ public class PucksStrategy implements CollisionStrategy {
     private final Counter brickCounter;
     private final ImageReader imageReader;
     private final SoundReader soundReader;
+    private final Brick[][] brickGrid;
 
     private static final String PUCK_IMAGE_PATH = "assets/mockBall.png";
     private static final String BLOP_PATH = "assets/blop.wav";
@@ -43,11 +45,12 @@ public class PucksStrategy implements CollisionStrategy {
     public PucksStrategy(GameObjectCollection gameObjectCollection,
                          Counter brickCounter,
                          ImageReader imageReader,
-                         SoundReader soundReader) {
+                         SoundReader soundReader, Brick[][] brickGrid) {
         this.gameObjectCollection = gameObjectCollection;
         this.brickCounter = brickCounter;
         this.imageReader = imageReader;
         this.soundReader = soundReader;
+        this.brickGrid = brickGrid;
     }
 
     /**
@@ -59,6 +62,10 @@ public class PucksStrategy implements CollisionStrategy {
     public void onCollision(GameObject firstObject, danogl.GameObject otherObject) {
         if (gameObjectCollection.removeGameObject(firstObject, Layer.STATIC_OBJECTS)) {
             brickCounter.decrement();
+            Brick myBrick = (Brick) firstObject;
+            int row = myBrick.getRow();
+            int col = myBrick.getCol();
+            brickGrid[row][col] = null;
         }
         createPuck(otherObject.getCenter());
         createPuck(otherObject.getCenter());

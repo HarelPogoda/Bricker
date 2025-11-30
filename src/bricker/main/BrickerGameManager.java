@@ -43,7 +43,7 @@ public class BrickerGameManager extends GameManager{
 
     static final int SCREEN_WIDTH = 700;
     static final int SCREEN_HEIGHT = 500;
-    static final float BALL_SPEED = 100f;
+    static final float BALL_SPEED = 200f;
     static final float BALL_START_COORDINATES = 0.5f;
     static final int SCREEN_FIRST_ROW = 0;
     static final float SCREEN_FIRST_COLUMN = 0f;
@@ -54,7 +54,8 @@ public class BrickerGameManager extends GameManager{
     static final float SPACE_BETWEEN_OBJECTS = 1;
     static final int DEFAULT_BRICKS_PER_ROW= 10;
     static final int DEFAULT_BRICK_ROWS = 5;
-    private static final int MAX_LIVES = 3;
+    private static final int MAX_LIVES = 4;
+    private static final int INITIAL_LIVES = 3;
     private static final float HEARTS_X_POS = 30f;
     private static final float HEARTS_Y_MARGIN = 50f;
     private static final float HEARTS_WIDTH = 100f;
@@ -73,9 +74,12 @@ public class BrickerGameManager extends GameManager{
     private WindowController windowController;
     private Ball ball;
     private Counter brickCounter;
-    private int lifeCount;
+//    private int lifeCount;
+    private Counter lifeCounter;
     private GraphicLifeCounter graphicLifeCounter;
     private NumericLifeCounter numericLifeCounter;
+    private final Brick[][] brickGrid;
+    private GameObject mainPaddle;
 
     /**
      * Constructs a new BrickerGameManager instance.
@@ -85,11 +89,12 @@ public class BrickerGameManager extends GameManager{
      * @param rowsOfBricks Number of rows on the screen
      * @param bricksPerRow Number of columns on the screen
      */
-    public BrickerGameManager(String windowTitle, Vector2 screenSize, int rowsOfBricks, int bricksPerRow) {
+    public BrickerGameManager(String windowTitle, Vector2 screenSize, int rowsOfBricks,  int bricksPerRow) {
         super(windowTitle, screenSize);
         this.rowsOfBricks = rowsOfBricks;
         this.bricksPerRow = bricksPerRow;
         this.brickCounter = new Counter(0);
+        brickGrid = new Brick[rowsOfBricks][bricksPerRow];
 
     }
 
@@ -134,7 +139,8 @@ public class BrickerGameManager extends GameManager{
         this.imageReader = imageReader;
         this.soundReader = soundReader;
         this.inputListener = inputListener;
-        this.lifeCount = MAX_LIVES;
+        this.lifeCounter = new Counter(INITIAL_LIVES);
+//        this.lifeCount = MAX_LIVES;
 
 
         createBackground();
@@ -162,7 +168,7 @@ public class BrickerGameManager extends GameManager{
         GraphicLifeCounter graphicLifeCounter = new GraphicLifeCounter(
                 heartPos,
                 heartDims,
-                lifeCount,
+                lifeCounter,
                 heartImage,
                 gameObjects(),
                 MAX_LIVES
@@ -176,7 +182,7 @@ public class BrickerGameManager extends GameManager{
         NumericLifeCounter numericLifeCounter = new NumericLifeCounter(
                 numericPos,
                 numericDims,
-                lifeCount
+                lifeCounter
         );
 
         gameObjects().addGameObject(numericLifeCounter, Layer.UI);
@@ -201,11 +207,11 @@ public class BrickerGameManager extends GameManager{
         }
 
         if (ball.getCenter().y() > windowController.getWindowDimensions().y()) {
-            lifeCount--;
-            graphicLifeCounter.setLives(lifeCount);
-            numericLifeCounter.setLives(lifeCount);
+            lifeCounter.decrement();
+//            graphicLifeCounter.setLives(lifeCounter);
+//            numericLifeCounter.setLives(lifeCounter);
 
-            if (lifeCount > 0) {
+            if (lifeCounter.value() > 0) {
                 ball.setCenter(windowController.getWindowDimensions().mult(0.5f));
                 ball.setVelocity(set_ball_direction());
             } else {
@@ -238,7 +244,7 @@ public class BrickerGameManager extends GameManager{
     Renderable renderable = imageReader.readImage(BRICK_PATH, false);
     this.brickCounter = new Counter(0);
     BrickStrategiesFactory factory = new BrickStrategiesFactory(this.gameObjects(), this.brickCounter,
-            imageReader, soundReader, inputListener, windowDimensions);
+            imageReader, soundReader, inputListener, windowDimensions,brickGrid,lifeCounter,mainPaddle);
 
     float totalAvailableWidth = SCREEN_WIDTH - (2 * WALL_WIDTH) - ((bricksPerRow - 1) * SPACE_BETWEEN_OBJECTS);
     float brickWidth = totalAvailableWidth / bricksPerRow;
@@ -249,13 +255,13 @@ public class BrickerGameManager extends GameManager{
             float y = WALL_WIDTH + (row * (BRICK_HEIGHT + SPACE_BETWEEN_OBJECTS));
 
             CollisionStrategy collisionStrategy = factory.getStrategy(BEHAVIORS_ALLOWED);
-            GameObject brick = new Brick(
+            Brick brick = new Brick(
                     new Vector2(x, y),
                     new Vector2(brickWidth, BRICK_HEIGHT),
                     renderable,row,column,
                     collisionStrategy
             );
-
+            brickGrid[row][column] = brick;
             gameObjects().addGameObject(brick, Layer.STATIC_OBJECTS);
             brickCounter.increment();
             }
@@ -316,6 +322,7 @@ public class BrickerGameManager extends GameManager{
 
         paddle.setCenter(
                 new Vector2(windowDimensions.x()/2, windowDimensions.y()-30));
+        mainPaddle = paddle;
 
         gameObjects().addGameObject(paddle);
     }
