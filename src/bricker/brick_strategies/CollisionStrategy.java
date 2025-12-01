@@ -8,6 +8,11 @@ import danogl.GameObject;
  * @author Nehorai Amrusi, Harel Pogoda
  */
 public interface CollisionStrategy {
+    /**
+     * The method to be called upon a collision.
+     * @param firstObject In our four implemented strategies, this is the brick.
+     * @param otherObject the other object.
+     */
     void onCollision(GameObject firstObject, danogl.GameObject otherObject);
 
 }

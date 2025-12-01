@@ -22,6 +22,8 @@ public class NewLifeStrategy implements CollisionStrategy {
 
     // Constant for the maximum allowed lives
     private static final int MAX_LIVES = 4;
+    private static final Vector2 HEART_SIZE = new Vector2(20, 20);
+    private static final float RELATIVE_POSITION_TO_BRICK = 0.5f;
 
     // Path to the heart image asset
     private static final String HEART_IMAGE_PATH = "assets/heart.png";
@@ -71,11 +73,7 @@ public class NewLifeStrategy implements CollisionStrategy {
     @Override
     public void onCollision(GameObject firstObject, GameObject otherObject) {
 
-        // Try to remove the brick from the static layer.
-        // The boolean check ensures we process this logic only once per brick.
         if (gameObjectCollection.removeGameObject(firstObject, Layer.STATIC_OBJECTS)) {
-
-            // 1. Handle brick removal and tracking
             brickCounter.decrement();
 
             Brick myBrick = (Brick) firstObject;
@@ -83,23 +81,14 @@ public class NewLifeStrategy implements CollisionStrategy {
             int col = myBrick.getCol();
             brickGrid[row][col] = null;
 
-            // 2. Heart Spawning Logic
-
-            // Only spawn a heart if the player is not at full health
             if (lifeCounter.value() < MAX_LIVES) {
-
-                // Calculate spawn position (center of the broken brick)
-                Vector2 heartSize = new Vector2(20, 20);
                 Vector2 brickCenter = myBrick.getCenter();
-                // Adjust to top-left corner so the heart appears centered
-                Vector2 heartTopLeft = brickCenter.subtract(heartSize.mult(0.5f));
+                Vector2 heartTopLeft = brickCenter.subtract(HEART_SIZE.mult(RELATIVE_POSITION_TO_BRICK));
 
                 Renderable heartImage = imageReader.readImage(HEART_IMAGE_PATH, true);
-
-                // Create the falling heart object
                 FallingHeart heart = new FallingHeart(
                         heartTopLeft,
-                        heartSize,
+                        HEART_SIZE,
                         heartImage,
                         gameObjectCollection,
                         lifeCounter,
@@ -107,7 +96,6 @@ public class NewLifeStrategy implements CollisionStrategy {
                         windowDimensions
                 );
 
-                // Add the heart to the game
                 gameObjectCollection.addGameObject(heart);
             }
         }

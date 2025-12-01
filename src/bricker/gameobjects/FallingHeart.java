@@ -12,6 +12,8 @@ import danogl.util.Vector2;
  * If the main paddle collects it, the player gains an extra life.
  */
 public class FallingHeart extends GameObject {
+    private static final int MAX_LIVES = 4;
+    private static final Vector2 HEART_DIRECTION = new Vector2(0, 100);
 
     private final GameObjectCollection gameObjects;
     private final Counter lifeCounter;
@@ -42,7 +44,7 @@ public class FallingHeart extends GameObject {
 
         // Set constant downward velocity (100 pixels per second)
         // This ensures the heart falls straight down.
-        this.setVelocity(new Vector2(0, 100));
+        this.setVelocity(HEART_DIRECTION);
     }
 
     /**
@@ -74,7 +76,7 @@ public class FallingHeart extends GameObject {
         // Double-check that we hit the main paddle using reference equality
         if (other == mainPaddle) {
             // Only increment lives if the player has fewer than 4 lives
-            if (lifeCounter.value() < 4) {
+            if (lifeCounter.value() < MAX_LIVES) {
                 lifeCounter.increment();
             }
 

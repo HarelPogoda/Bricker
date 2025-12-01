@@ -21,6 +21,8 @@
      */
     public class ExplosionStrategy implements CollisionStrategy {
 
+        static final String EXPLOSION_SOUND_PATH = "assets/explosion.wav";
+
         private final GameObjectCollection gameObjects;
         private final Counter brickCounter;
         private final Brick[][] brickGrid;
@@ -41,7 +43,7 @@
             this.gameObjects = gameObjects;
             this.brickCounter = brickCounter;
             this.brickGrid = brickGrid;
-            this.explosionSound = soundReader.readSound("assets/explosion.wav");
+            this.explosionSound = soundReader.readSound(EXPLOSION_SOUND_PATH);
         }
 
         /**
@@ -53,7 +55,9 @@
          */
         @Override
         public void onCollision(GameObject firstObject, GameObject otherObject) {
-            if (!(firstObject instanceof Brick)) return;
+            if (!(firstObject instanceof Brick)) {
+                return;
+            }
             Brick myBrick = (Brick) firstObject;
             int row = myBrick.getRow();
             int col = myBrick.getCol();
@@ -65,17 +69,15 @@
                 explosionSound.play();
             }
             // Process neighbors
-            explodeNeighbor(row - 1, col, myBrick); // Up
-            explodeNeighbor(row + 1, col, myBrick); // Down
-            explodeNeighbor(row, col - 1, myBrick); // Left
-            explodeNeighbor(row, col + 1, myBrick); // Right
-
-
+            explodeNeighbor(row - 1, col, myBrick);
+            explodeNeighbor(row + 1, col, myBrick);
+            explodeNeighbor(row, col - 1, myBrick);
+            explodeNeighbor(row, col + 1, myBrick);
         }
 
 
 
-        /**
+        /*
          * Handles a single neighboring brick:
          * - Calls onCollisionEnter to break it.
          * - If it has ExplosionStrategy, triggers recursive explosion.

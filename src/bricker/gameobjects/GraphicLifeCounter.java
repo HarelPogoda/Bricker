@@ -60,19 +60,16 @@ public class GraphicLifeCounter extends GameObject {
         float heartSize = widgetDimensions.x() / maxLives;
 
         // Loop to create all heart objects upfront
-        for (int i = 0; i < maxLives; i++) {
+        for (int life = 0; life < maxLives; life++) {
             // Calculate position for the current heart (offset by index)
-            Vector2 heartPos = widgetTopLeftCorner.add(new Vector2(i * heartSize, 0));
-
-            // Create the heart object
-            hearts[i] = new GameObject(
+            Vector2 heartPos = widgetTopLeftCorner.add(new Vector2(life * heartSize, 0));
+            hearts[life] = new GameObject(
                     heartPos,
                     new Vector2(heartSize, widgetDimensions.y()),
                     widgetRenderable);
-
             // Only add the heart to the game if the player currently has this life
-            if (i < numOfLives) {
-                gameObjectCollection.addGameObject(hearts[i], Layer.UI);
+            if (life < numOfLives) {
+                gameObjectCollection.addGameObject(hearts[life], Layer.UI);
             }
         }
     }
@@ -101,13 +98,13 @@ public class GraphicLifeCounter extends GameObject {
 
             if (currentLives < numOfLives) {
                 // Case 1: Lives decreased. Remove the extra hearts from the UI layer.
-                for (int i = currentLives; i < numOfLives; i++) {
-                    gameObjectCollection.removeGameObject(hearts[i], Layer.UI);
+                for (int life = currentLives; life < numOfLives; life++) {
+                    gameObjectCollection.removeGameObject(hearts[life], Layer.UI);
                 }
             } else {
                 // Case 2: Lives increased. Add the missing hearts to the UI layer.
-                for (int i = numOfLives; i < currentLives; i++) {
-                    gameObjectCollection.addGameObject(hearts[i], Layer.UI);
+                for (int life = numOfLives; life < currentLives; life++) {
+                    gameObjectCollection.addGameObject(hearts[life], Layer.UI);
                 }
             }
 

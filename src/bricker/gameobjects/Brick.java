@@ -49,15 +49,19 @@ public class Brick extends GameObject {
     }
 
 
+    /**
+     * A getter for the row of the brick on the screen
+     * @return the brick's row
+     */
     public int getRow() {
         return row;
     }
 
+    /**
+     * A getter for the column of the brick on the screen
+     * @return the brick's column
+     */
     public int getCol() {
         return col;
-    }
-
-    public CollisionStrategy getCollisionStrategy() {
-        return this.collisionstrategy;
     }
 }

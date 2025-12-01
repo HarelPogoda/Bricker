@@ -29,31 +29,31 @@ import bricker.gameobjects.NumericLifeCounter;
  * @author Nehorai Amrusi, Harel Pogoda
  */
 public class BrickerGameManager extends GameManager{
-    static final String GAME_TITLE = "Bricker";
-    static final String BALL_IMAGE_PATH = "assets/ball.png";
-    static final String BLOP_PATH = "assets/blop.wav";
-    static final String PADDLE_IMAGE_PATH = "assets/paddle.png";
-    static final String BACKGROUND_IMAGE_PATH = "assets/DARK_BG2_small.jpeg";
-    static final String BRICK_PATH = "assets/brick.png";
-    static final String HEART_PATH = "assets/heart.png";
-    static final String LOSE_MESSAGE = "You lose! Play again?";
-    static final String WIN_MESSAGE = "You win! Play again?";
+    private static final String GAME_TITLE = "Bricker";
+    private static final String BALL_IMAGE_PATH = "assets/ball.png";
+    private static final String BLOP_PATH = "assets/blop.wav";
+    private static final String PADDLE_IMAGE_PATH = "assets/paddle.png";
+    private static final String BACKGROUND_IMAGE_PATH = "assets/DARK_BG2_small.jpeg";
+    private static final String BRICK_PATH = "assets/brick.png";
+    private static final String HEART_PATH = "assets/heart.png";
+    private static final String LOSE_MESSAGE = "You lose! Play again?";
+    private static final String WIN_MESSAGE = "You win! Play again?";
 
-    static final Color WALLS_COLOR = Color.MAGENTA;
+    private static final Color WALLS_COLOR = Color.MAGENTA;
 
-    static final int SCREEN_WIDTH = 700;
-    static final int SCREEN_HEIGHT = 500;
-    static final float BALL_SPEED = 200f;
-    static final float BALL_START_COORDINATES = 0.5f;
-    static final int SCREEN_FIRST_ROW = 0;
-    static final float SCREEN_FIRST_COLUMN = 0f;
-    static final int WALL_WIDTH = 5;
-    static final int RIGHT_WALL_LEFT_COLUMN = SCREEN_WIDTH - WALL_WIDTH + 1;
-    static final int REVERSE = -1;
-    static final int BRICK_HEIGHT = 15;
-    static final float SPACE_BETWEEN_OBJECTS = 1;
-    static final int DEFAULT_BRICKS_PER_ROW= 10;
-    static final int DEFAULT_BRICK_ROWS = 5;
+    private static final int SCREEN_WIDTH = 700;
+    private static final int SCREEN_HEIGHT = 500;
+    private static final float BALL_SPEED = 200f;
+    private static final float BALL_START_COORDINATES = 0.5f;
+    private static final int SCREEN_FIRST_ROW = 0;
+    private static final float SCREEN_FIRST_COLUMN = 0f;
+    private static final int WALL_WIDTH = 5;
+    private static final int RIGHT_WALL_LEFT_COLUMN = SCREEN_WIDTH - WALL_WIDTH + 1;
+    private static final int REVERSE = -1;
+    private static final int BRICK_HEIGHT = 15;
+    private static final float SPACE_BETWEEN_OBJECTS = 1;
+    private static final int DEFAULT_BRICKS_PER_ROW= 10;
+    private static final int DEFAULT_BRICK_ROWS = 5;
     private static final int MAX_LIVES = 4;
     private static final int INITIAL_LIVES = 3;
     private static final float HEARTS_X_POS = 30f;
@@ -74,10 +74,7 @@ public class BrickerGameManager extends GameManager{
     private WindowController windowController;
     private Ball ball;
     private Counter brickCounter;
-//    private int lifeCount;
     private Counter lifeCounter;
-    private GraphicLifeCounter graphicLifeCounter;
-    private NumericLifeCounter numericLifeCounter;
     private final Brick[][] brickGrid;
     private GameObject mainPaddle;
 
@@ -89,7 +86,8 @@ public class BrickerGameManager extends GameManager{
      * @param rowsOfBricks Number of rows on the screen
      * @param bricksPerRow Number of columns on the screen
      */
-    public BrickerGameManager(String windowTitle, Vector2 screenSize, int rowsOfBricks,  int bricksPerRow) {
+    public BrickerGameManager(String windowTitle, Vector2 screenSize, int rowsOfBricks,
+                              int bricksPerRow) {
         super(windowTitle, screenSize);
         this.rowsOfBricks = rowsOfBricks;
         this.bricksPerRow = bricksPerRow;
@@ -140,7 +138,6 @@ public class BrickerGameManager extends GameManager{
         this.soundReader = soundReader;
         this.inputListener = inputListener;
         this.lifeCounter = new Counter(INITIAL_LIVES);
-//        this.lifeCount = MAX_LIVES;
 
 
         createBackground();
@@ -152,7 +149,7 @@ public class BrickerGameManager extends GameManager{
     }
 
 
-    /**
+    /*
      * Initializes the visual representations of the player's remaining lives.
      * This method sets up both the graphical counter (hearts) and the numeric counter.
      * It calculates their positions relative to the window dimensions using pre-defined constants,
@@ -186,8 +183,6 @@ public class BrickerGameManager extends GameManager{
         );
 
         gameObjects().addGameObject(numericLifeCounter, Layer.UI);
-        this.graphicLifeCounter = graphicLifeCounter;
-        this.numericLifeCounter = numericLifeCounter;
     }
 
 
@@ -208,8 +203,6 @@ public class BrickerGameManager extends GameManager{
 
         if (ball.getCenter().y() > windowController.getWindowDimensions().y()) {
             lifeCounter.decrement();
-//            graphicLifeCounter.setLives(lifeCounter);
-//            numericLifeCounter.setLives(lifeCounter);
 
             if (lifeCounter.value() > 0) {
                 ball.setCenter(windowController.getWindowDimensions().mult(0.5f));
@@ -220,7 +213,7 @@ public class BrickerGameManager extends GameManager{
         }
     }
 
-    /**
+    /*
      * A handler for ending the game.
      * @param prompt A prompt to show the user when the game ends.
      */
@@ -233,7 +226,7 @@ public class BrickerGameManager extends GameManager{
     }
 
 
-    /**
+    /*
      * Initializes and constructs the grid of bricks for the game level.
      * This method calculates the width of each brick based on the screen width and the requested
      * number of columns to ensure they fit perfectly between the walls.
@@ -268,7 +261,7 @@ public class BrickerGameManager extends GameManager{
         }
     }
 
-    /**
+    /*
      * Calculates a random initial velocity vector for the ball.
      * The method uses a fixed speed magnitude but randomizes the direction
      * (positive or negative) for both the X and Y axes, resulting in a diagonal movement
@@ -290,7 +283,7 @@ public class BrickerGameManager extends GameManager{
     }
 
 
-    /**
+    /*
      * Creates the ball object for the game.
      * Sets its visual representation, collision sound, initial position (centered),
      * and randomized initial velocity direction.
@@ -306,7 +299,7 @@ public class BrickerGameManager extends GameManager{
         ball.setVelocity(set_ball_direction());
     }
 
-    /**
+    /*
      * Creates the user-controlled paddle.
      * Sets its visual representation, input listener for movement, and
      * defines the movement boundaries (min/max X coordinates) to prevent it from leaving the screen.
@@ -327,7 +320,7 @@ public class BrickerGameManager extends GameManager{
         gameObjects().addGameObject(paddle);
     }
 
-    /**
+    /*
      * Creates the static walls around the game area.
      * Generates three walls: Left, Right, and Top, using the defined wall width and color.
      */
@@ -355,7 +348,7 @@ public class BrickerGameManager extends GameManager{
         gameObjects().addGameObject(topWall);
     }
 
-    /**
+    /*
      * Creates the background for the game scene.
      * Sets the background image and assigns it to the CAMERA_COORDINATES coordinate space
      * to ensure it remains static relative to the view. It is added to the BACKGROUND layer.

@@ -17,7 +17,6 @@ import danogl.util.Vector2;
  */
 public class Ball extends GameObject {
     private Sound collisionSound;
-    private int collisionCounter;
 
     /**
      * Construct a new GameObject instance.
@@ -46,16 +45,7 @@ public class Ball extends GameObject {
         super.onCollisionEnter(other, collision);
         Vector2 newVel = getVelocity().flipped(collision.getNormal());
         setVelocity(newVel);
-        collisionCounter++;
         collisionSound.play();
     }
 
-    /**
-     * Retrieves the total number of collisions this ball has been involved in since its creation.
-     *
-     * @return The collision count.
-     */
-    public int getCollisionCounter() {
-        return collisionCounter;
-    }
 }

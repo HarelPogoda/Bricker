@@ -36,7 +36,7 @@ public class BrickStrategiesFactory {
     private int doublesCounter;
     private int doublesAllowed;
     private final Brick[][] brickGrid;
-    private Counter lifeCounter;
+    private final Counter lifeCounter;
     private final GameObject mainPaddle;
     /**
      * Constructor for the factory
@@ -46,6 +46,10 @@ public class BrickStrategiesFactory {
      * @param soundReader          sound reader for sounds for the different behaviors
      * @param inputListener        Some behaviors, like extra paddle, might need this
      * @param windowDimensions     size of the screen
+     * @param brickGrid            the grid of bricks in the game
+     * @param lifeCounter          how many lives the user has left
+     * @param mainPaddle           The main paddle of the game. The falling heart shouldn't
+     *                             collide with it, so we need to pass it to that strategy.
      */
     public BrickStrategiesFactory(GameObjectCollection gameObjectCollection,
                                   Counter brickCounter,
@@ -104,17 +108,13 @@ public class BrickStrategiesFactory {
             return new ExtraPaddleStrategy(gameObjects, brickCounter, imageReader,
                     windowDimensions, inputListener, extraPaddleCounter,brickGrid);
         } else if (result == PROBABILITY_FOR_EXPLOSION) {
-            return new ExplosionStrategy(gameObjects, brickCounter,soundReader,brickGrid);
+            return new ExplosionStrategy(gameObjects, brickCounter, soundReader, brickGrid);
         } else if (result == PROBABILITY_FOR_NEW_LIFE) {
-            return new NewLifeStrategy(gameObjects, brickCounter,brickGrid,imageReader,lifeCounter,mainPaddle,windowDimensions);
+            return new NewLifeStrategy(gameObjects, brickCounter, brickGrid, imageReader,
+                    lifeCounter, mainPaddle, windowDimensions);
         }
-//         else, result = 9, and we get a double behavior.
+        // else, result = 9, and we get a double behavior.
         doublesCounter++;
         return new DoubleStrategy(getStrategyOrDouble(), getStrategyOrDouble());
-//        int a = rand.nextInt(2);
-//        if(a==0 ) {
-//            return new ExplosionStrategy(gameObjects, brickCounter, soundReader, brickGrid);
-//        }
-//        else {return new BasicCollisionStrategy(gameObjects, brickCounter,brickGrid);}
     }
 }

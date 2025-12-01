@@ -1,4 +1,3 @@
-
 package bricker.gameobjects;
 
 import danogl.GameObject;
@@ -12,6 +11,8 @@ import java.awt.Color;
  * It tracks the global life counter and updates the text/color automatically.
  */
 public class NumericLifeCounter extends GameObject {
+    private final static int START_LIVES_AMOUNT = 3;
+
     private final TextRenderable textRenderable;
     private final Counter lifeCounter; // Reference to the global counter
     private int lives; // Internal tracker to detect changes
@@ -60,9 +61,9 @@ public class NumericLifeCounter extends GameObject {
      * Green for 3 or more, Yellow for 2, Red for 1.
      */
     private void updateColor() {
-        if (lives >= 3) {
+        if (lives >= START_LIVES_AMOUNT) {
             textRenderable.setColor(Color.green);
-        } else if (lives == 2) {
+        } else if (lives == START_LIVES_AMOUNT - 1) {
             textRenderable.setColor(Color.yellow);
         } else {
             textRenderable.setColor(Color.red); // Includes 1 and 0
