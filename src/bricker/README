@@ -1,5 +1,6 @@
-pudusv._1107,COMPLETE CSE USERNAME
-211525860,COMPLETE
+pudusv._1107,neorai.amrusi
+211525860,318463187
+
 
 
 1. To handle collisions
@@ -39,7 +40,23 @@ paddle adds a counter to erase it when it had 4 collisions, and of course is ini
 different parameters. The factory knows when an extra paddle already exists via a counter, and it
 passes it to the ExtraPaddleStrategy and then to the extra paddle to notify him when it's
 terminating itself.
-COMPLETE: EXPLOSION AND EXTRA LIVESS
+ExplosionStrategy-
+the brick breaks just like a normal brick, but in addition, it also causes the nearby
+bricks around it to break as well. This creates a chain reaction, similar to
+an explosion spreading outward. The code works by letting the BrickStrategiesFactory
+create an ExplosionStrategy object. When the brick is hit, it simply calls the strategy’s
+onCollision method, and the strategy handles removing the brick and all the neighboring bricks.
+This behavior is implemented as a strategy so that only selected bricks will explode,
+while others keep their normal behavior.
+
+ExtraLivesStrategy- is another special collision strategy.
+When the ball hits a brick that uses this strategy, the brick breaks normally,
+but the player can receives one extra life if hit the falling heart object that created.
+the falling heart object when creates works and updated supratedly.
+Only certain bricks give extra lives, so the BrickStrategiesFactory
+creates this strategy only when needed. Like the other strategies, the brick just
+calls onCollision, and the strategy handles everything. This keeps the behavior
+clean and separate, and makes it easy to add additional special brick behaviors.
 
 4. We implemented the double behavior using a decorator that holds two other behaviors, and invokes
 them when the brick is hit. We enforced the N-behaviors limitation (in our case it's 3) by passing the
